@@ -1,0 +1,24 @@
+# Ignorar dependências instaladas
+node_modules/
+
+# Ignorar arquivos de log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Ignorar variáveis de ambiente (se usar)
+.env
+
+# Ignorar arquivos de cache e sistema
+.DS_Store
+Thumbs.db
+
+# Ignorar backups de editores
+*.swp
+*.swo
+
+# VS Code settings (opcional)
+.vscode/
+
+# Arquivos de coverage (caso use testes no futuro)
+coverage/
