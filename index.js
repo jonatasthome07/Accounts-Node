@@ -22,7 +22,7 @@ function operation(){
 
     }
     else if (action === "Consultar saldo"){
-        
+        getAccountBalance();
     }
     else if (action === "Sacar"){
         
@@ -83,7 +83,7 @@ function buildAccount(){
         fs.writeFileSync(`accounts/${accountName}.json`, '{"balance": 0}', function(err){
             console.log(err)
         })
-
+        
         console.log(chalk.green("Parabéns, a sua conta foi criada!"))
         operation();
     }).catch((err) =>{
@@ -147,9 +147,7 @@ function addAmount(accountName, amount){
         return deposit();
     }
     account.balance = parseFloat(amount) + parseFloat(account.balance)
-    fs.writeFileSync(`accounts/${accountName}.json`, JSON.stringify(account), function(err){
-        console.log(err)
-    })
+    fs.writeFileSync(`accounts/${accountName}.json`, JSON.stringify(account))
 
     console.log(chalk.green(`Depósito de R$${amount} realizado com sucesso!`))
     operation();
@@ -158,4 +156,24 @@ function addAmount(accountName, amount){
 function getAccount (accountName){
     const accountJson = fs.readFileSync(`accounts/${accountName}.json`, {encoding: "utf8", flag: "r"})
     return JSON.parse(accountJson)
-} 
+}
+
+function getAccountBalance(){
+    inquirer.prompt([
+        {
+            name: "accountName",
+            message: "Qual o nome da sua conta ?"
+        }
+    ]).then((answer)=>{
+        const accountName = answer.accountName
+        if(!checkAccount(accountName)){
+            checkAccount();
+        }
+        const accountData = getAccount(accountName)
+        console.log(chalk.bgBlue.black(`Olá ${accountName}, o saldo da sua conta é R$${accountData.balance}`))
+        operation();
+        
+    }).catch((error)=>{
+        console.log(error)
+    })
+}
