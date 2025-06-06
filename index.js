@@ -1,6 +1,8 @@
 const fs = require("fs")
 const chalk = require ("chalk")
 const inquirer = require ("inquirer")
+const { error } = require("console")
+
 
 function operation(){
     inquirer.prompt([{
@@ -8,21 +10,15 @@ function operation(){
         name: "action",
         message: "O que você deseja fazer ?",
         choices: ["Criar conta", "Consultar saldo", "Depositar", "Sacar", "Sair"]
-    },
-    {
-        type: "confirm",
-        name: "choose",
-        message: "Confirmar opção ?"
     }
 ]).then((answer)=>{
     const action = answer.action
-    const choose = answer.choose
-    console.info(`Você escolheu a opção ${action}, aguarde um momento, você será redirecionado...`)
-    
+   
     if(action === "Criar conta"){
         createAccount();
     }
     else if (action === "Depositar"){
+        deposit();
 
     }
     else if (action === "Consultar saldo"){
@@ -91,6 +87,45 @@ function buildAccount(){
         console.log(chalk.green("Parabéns, a sua conta foi criada!"))
         operation();
     }).catch((err) =>{
-
+        console.log(err)
     })
+}
+
+function deposit(){
+    inquirer.prompt([
+        {
+            name: "accountName",
+            message: "Qual o nome da sua conta ?"
+        }
+    ]).then((answer)=>{
+        const accoutName = answer.accountName
+        if (!checkAccount(accoutName)){
+            
+        }
+    })
+    .catch((err) =>{
+        console.log(err)
+    })
+}
+
+function checkAccount (accountName){
+    if(!fs.existsSync(`accounts/${accountName}.json`)){
+        inquirer.prompt([
+            {
+                type: "list",
+                name: "choose",
+                message: "Conta inexistente, deseja criar uma ?",
+                choices : ["Sim", "Não"]
+            }
+        ]).then((answer)=>{
+            if(answer.choose === "Sim"){
+                buildAccount();
+            }
+            else{
+                operation(); 
+            }
+        }).catch((err)=>{
+
+        })
+    }
 }
