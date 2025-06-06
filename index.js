@@ -19,8 +19,37 @@ function operation(){
     const choose = answer.choose
     console.info(`Você escolheu a opção ${action}, aguarde um momento, você será redirecionado...`)
     
-    if(action == "Criar conta"){
+    if(action === "Criar conta"){
         createAccount();
+    }
+    else if (action === "Depositar"){
+
+    }
+    else if (action === "Consultar saldo"){
+        
+    }
+    else if (action === "Sacar"){
+        
+    }
+    else if (action === "Sair"){
+        inquirer.prompt([
+            {
+                type:"list",
+                name: "resp",
+                message: "Realmente deseja sair ?",
+                choices: ["Sim", "Não"]
+
+            }
+        ]).then((answer)=>{
+            const escolha = answer.resp
+            if (escolha === "Sim"){
+                console.log(chalk.blue("Obrigado por usar o Accounts! Até logo!"))
+                process.exit();
+            }
+            else {
+                operation();
+            }
+        })
     }
 })
 .catch((err) => console.log(err))
