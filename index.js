@@ -17,7 +17,7 @@ function operation(){
 ]).then((answer)=>{
     const action = answer.action
     const choose = answer.choose
-    console.log(`Você escolheu a opção ${action}, aguarde um momento, você será redirecionado...`)
+    console.info(`Você escolheu a opção ${action}, aguarde um momento, você será redirecionado...`)
     
     if(action == "Criar conta"){
         createAccount();
@@ -31,4 +31,28 @@ operation();
 function createAccount(){
     console.log(chalk.bgGreen.black("Parabéns por escolher nosso banco"))
     console.log(chalk.green("Defina as opções da sua conta a seguir"))
+
+    buildAccount();
+}
+
+function buildAccount(){
+    inquirer.prompt([
+        {
+            name: "accountName",
+            message: "Digite um nome para a sua conta"
+        }
+    ]).then((answer)=>{
+        const accountName = answer.accountName 
+        console.info(accountName)
+
+        if (!fs.existsSync("accounts")){
+            fs.mkdirSync("accounts")
+        }
+
+        if (fs.existsSync(`accounts/${accountName}.json`)){
+            console.log(chalk.bgRed.black("Essa conta já existe, escolha outro nome."))
+        }
+    }).catch((err) =>{
+
+    })
 }
