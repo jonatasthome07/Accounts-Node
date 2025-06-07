@@ -200,7 +200,7 @@ function widthdraw(){
         ]).then((answer)=>{
             const amount = answer.amount
             console.log(amount)
-            operation();
+            removeAmmount (accountName, amount)
 
         }).catch((err)=>{
             console.log(err)
@@ -209,4 +209,23 @@ function widthdraw(){
     }).catch((err)=>{
         console.log(err)
     })
+}
+
+function removeAmmount(accountName, amount){
+    const accountData = getAccount(accountName)
+    
+    if(!amount){
+        console.log(chalk.bgRed.black("Ocorreu um erro! Tente novamente mais tarde!"))
+        return widthdraw();
+    }
+    
+    if(accountData.balance < amount){
+        console.log(chalk.bgRed.black("Saldo insuficiente! Insira seus dados novamente!"))
+        return widthdraw();
+    }
+
+    accountData.balance = parseFloat(accountData.balance) - parseFloat(amount)
+    fs.writeFileSync(`accounts/${accountName}.json`, JSON.stringify(accountData))
+    console.log("Saque efetuado com sucesso!")
+    operation();
 }
