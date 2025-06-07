@@ -25,7 +25,7 @@ function operation(){
         getAccountBalance();
     }
     else if (action === "Sacar"){
-        
+        widthdraw();
     }
     else if (action === "Sair"){
         inquirer.prompt([
@@ -166,8 +166,9 @@ function getAccountBalance(){
         }
     ]).then((answer)=>{
         const accountName = answer.accountName
-        if(!checkAccount(accountName)){
+        if(!fs.existsSync(`accounts/${accountName}.json`)){
             checkAccount();
+            return;
         }
         const accountData = getAccount(accountName)
         console.log(chalk.bgBlue.black(`Olá ${accountName}, o saldo da sua conta é R$${accountData.balance}`))
@@ -175,5 +176,37 @@ function getAccountBalance(){
         
     }).catch((error)=>{
         console.log(error)
+    })
+}
+
+function widthdraw(){
+    inquirer.prompt([
+        {
+            name:"accountName",
+            message:"Qual o nome da sua conta ?"
+        }
+    ]).then((answer)=>{
+        const accountName = answer.accountName
+        if(!fs.existsSync(`accounts/${accountName}.json`)){
+           checkAccount();
+           return;
+        }
+
+        inquirer.prompt([
+            {
+                name: "amount",
+                message: "Quanto você deseja sacar ?"
+            }
+        ]).then((answer)=>{
+            const amount = answer.amount
+            console.log(amount)
+            operation();
+
+        }).catch((err)=>{
+            console.log(err)
+        })
+
+    }).catch((err)=>{
+        console.log(err)
     })
 }
